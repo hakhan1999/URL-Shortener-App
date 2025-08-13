@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -12,6 +12,9 @@ import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import Error from "./Error";
 import * as Yup from "yup";
+import useFetch from "@/hooks/useFetch";
+import { login } from "@/db/apiAuth";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const Login = () => {
   const [errors, setErrors] = useState({});
@@ -28,6 +31,20 @@ const Login = () => {
     }));
   };
 
+  const { data, error, loading, fn: fnLogin } = useFetch(login, formData);
+
+  const navigate = useNavigate();
+  let [searchParams] = useSearchParams();
+  const longLink = searchParams.get("createNew");
+
+  useEffect(() => {
+    console.log(data);
+
+    if (error == null && data) {
+      navigate(`/dashboard${longLink ? `createNew${longLink}` : ""}`);
+    }
+  }, [data, error]);
+
   const handleLogin = async () => {
     setErrors({});
     try {
@@ -36,11 +53,13 @@ const Login = () => {
           .email("Invalid Email")
           .required("Email is required"),
         password: Yup.string()
-          .min(6, "Password must be atleast 6 characters long")
+          .min(5, "Password must be atleast 6 characters long")
           .required("Password is required"),
       });
 
       await schema.validate(formData, { abortEarly: false });
+
+      await fnLogin();
     } catch (error) {
       const newErrors = {};
 
@@ -58,6 +77,7 @@ const Login = () => {
         <CardDescription>
           Login to your account if you already have one
         </CardDescription>
+        {error && <Error message={error.message} />}
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="space-y-1">
@@ -85,7 +105,7 @@ const Login = () => {
       </CardContent>
       <CardFooter>
         <Button onClick={handleLogin} className="cursor-pointer">
-          {false ? <Loader2 className="animate-spin" /> : "Login"}
+          {loading ? <Loader2 className="animate-spin" /> : "Login"}
         </Button>
       </CardFooter>
     </Card>
