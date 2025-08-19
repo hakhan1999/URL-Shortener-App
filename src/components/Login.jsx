@@ -15,6 +15,7 @@ import * as Yup from "yup";
 import useFetch from "@/hooks/useFetch";
 import { login } from "@/db/apiAuth";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { UrlState } from "@/context/context";
 
 const Login = () => {
   const [errors, setErrors] = useState({});
@@ -32,16 +33,16 @@ const Login = () => {
   };
 
   const { data, error, loading, fn: fnLogin } = useFetch(login, formData);
+  const { fetchUser } = UrlState();
 
   const navigate = useNavigate();
   let [searchParams] = useSearchParams();
   const longLink = searchParams.get("createNew");
 
   useEffect(() => {
-    console.log(data);
-
     if (error == null && data) {
       navigate(`/dashboard${longLink ? `createNew${longLink}` : ""}`);
+      fetchUser();
     }
   }, [data, error]);
 
@@ -53,7 +54,7 @@ const Login = () => {
           .email("Invalid Email")
           .required("Email is required"),
         password: Yup.string()
-          .min(5, "Password must be atleast 6 characters long")
+          .min(5, "Password must be atleast 5 characters long")
           .required("Password is required"),
       });
 
