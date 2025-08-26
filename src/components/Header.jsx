@@ -52,10 +52,12 @@ const Header = () => {
                   {user?.user_metadata?.name}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
-                  <LinkIcon className="h-4 w-4" />
-                  <span>My Links</span>
-                </DropdownMenuItem>
+                <Link to="/dashboard">
+                  <DropdownMenuItem className="cursor-pointer">
+                    <LinkIcon className="h-4 w-4" />
+                    <span>My Links</span>
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuItem className="text-red-400 cursor-pointer">
                   <LogOutIcon className="h-4 w-4 text-red-400" />
                   <span
