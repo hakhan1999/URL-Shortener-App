@@ -1,5 +1,5 @@
 import { UrlState } from "@/context/context";
-import { LoaderCircleIcon } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import React from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,7 @@ const RequireAuth = ({ children }) => {
       navigate("/auth");
     }
   }, [isAuthenticated, loading]);
-  if (loading) return <LoaderCircleIcon className="animate-spin" />;
+  if (loading) return <Loader2 className="animate-spin" />;
 
   if (isAuthenticated) return children;
 };

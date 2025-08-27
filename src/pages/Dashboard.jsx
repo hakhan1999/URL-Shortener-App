@@ -9,6 +9,7 @@ import { getUrls } from "@/db/apiUrls";
 import { UrlState } from "@/context/context";
 import { getClicksForUrls } from "@/db/apiClicks";
 import LinkCard from "@/components/LinkCard";
+import { CreateLink } from "@/components/CreateLink";
 
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -53,7 +54,6 @@ const Dashboard = () => {
         </div>
       ) : (
         <>
-          {" "}
           <div className="grid grid-cols-2 gap-4">
             <Card>
               <CardHeader>
@@ -74,7 +74,7 @@ const Dashboard = () => {
           </div>
           <div className="flex justify-between mt-10">
             <h1 className="text-4xl font-extrabold">My Links</h1>
-            <Button>Create Link</Button>
+            <CreateLink className='cursor-pointer' />
           </div>
           <div className="relative mt-4">
             <Input

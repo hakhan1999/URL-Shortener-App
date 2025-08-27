@@ -1,10 +1,27 @@
-import { Copy, Delete, Download } from "lucide-react";
+import { Copy, Download, Loader2, Trash } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
+import useFetch from "@/hooks/useFetch";
+import { deleteUrl } from "@/db/apiUrls";
 
 const LinkCard = ({ url, fetchUrls }) => {
   const domain = import.meta.env.VITE_APP_DOMAIN_URL;
+
+  const downloadQr = () => {
+    const imageUrl = url?.qr;
+    const fileName = url?.title;
+
+    const anchor = document.createElement("a");
+    anchor.href = imageUrl;
+    anchor.download = fileName;
+
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+  };
+
+  const { loading: loadingDelete, fn: fnDelete } = useFetch(deleteUrl, url?.id);
   return (
     <div className="flex flex-col md:flex-row gap-5 border p-4 bg-gray-900 rounded-lg mt-5">
       <img
@@ -37,11 +54,19 @@ const LinkCard = ({ url, fetchUrls }) => {
         >
           <Copy />
         </Button>
-        <Button variant="ghost" className="cursor-pointer bg-[#020618]">
+        <Button
+          variant="ghost"
+          className="cursor-pointer bg-[#020618]"
+          onClick={downloadQr}
+        >
           <Download />
         </Button>
-        <Button variant="ghost" className="cursor-pointer bg-[#020618]">
-          <Delete />
+        <Button
+          variant="ghost"
+          className="cursor-pointer bg-[#020618]"
+          onClick={() => fnDelete().then(() => fetchUrls())}
+        >
+          {loadingDelete ? <Loader2 className="animate-spin" /> : <Trash />}
         </Button>
       </div>
     </div>
