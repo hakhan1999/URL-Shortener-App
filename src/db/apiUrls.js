@@ -59,3 +59,22 @@ export async function getLongUrl(id) {
 
     return data
 }
+
+
+// Single URL Page API 
+export async function getUrl({ id, user_id }) {
+    let query = supabase.from("urls").select("*").eq("id", id);
+
+    if (user_id) {
+        query = query.eq("user_id", user_id);
+    }
+
+    const { data, error } = await query.single();
+
+    if (error) {
+        console.error(error);
+        throw new Error("Short Url not found");
+    }
+
+    return data;
+}
