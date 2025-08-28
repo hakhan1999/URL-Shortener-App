@@ -1,3 +1,4 @@
+import { UAParser } from "ua-parser-js";
 import supabase, { supabaseUrl } from "./supabase";
 
 // Get URL API 
@@ -42,6 +43,18 @@ export async function createUrl({ title, longUrl, customUrl, user_id }, qrcode) 
     if (error) {
         console.error(error.message);
         throw new Error('Error creating short URL')
+    }
+
+    return data
+}
+
+
+// Long URL API 
+export async function getLongUrl(id) {
+    const { data, error } = await supabase.from("urls").select('id, original_url').or(`short_url.eq.${id}, custom_url.eq.${id}`).single()
+    if (error) {
+        console.error(error.message);
+        throw new Error('Error fetching Long URL')
     }
 
     return data
