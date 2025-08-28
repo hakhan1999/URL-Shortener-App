@@ -22,7 +22,6 @@ import { UrlState } from "@/context/context";
 
 export function CreateLink() {
   const { user } = UrlState();
-
   const navigate = useNavigate();
   const ref = useRef();
 
@@ -36,13 +35,14 @@ export function CreateLink() {
     customUrl: "",
   });
 
+  // ✅ Yup validation schema (customUrl is required now)
   const schema = yup.object().shape({
     title: yup.string().required("Title is required"),
     longUrl: yup
       .string()
       .url("Must be a valid URL")
       .required("Long URL is required"),
-    customUrl: yup.string(),
+    customUrl: yup.string().required("Custom link is required"),
   });
 
   const handleChange = (e) => {
@@ -63,11 +63,10 @@ export function CreateLink() {
     if (error === null && data) {
       navigate(`/link/${data[0].id}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, data]);
 
   const createNewLink = async () => {
-    setErrors([]);
+    setErrors({});
     try {
       await schema.validate(formValues, { abortEarly: false });
 
@@ -77,11 +76,9 @@ export function CreateLink() {
       await fnCreateUrl(blob);
     } catch (e) {
       const newErrors = {};
-
       e?.inner?.forEach((err) => {
         newErrors[err.path] = err.message;
       });
-
       setErrors(newErrors);
     }
   };
@@ -100,10 +97,12 @@ export function CreateLink() {
         <DialogHeader>
           <DialogTitle className="font-bold text-2xl">Create New</DialogTitle>
         </DialogHeader>
+
         {formValues?.longUrl && (
           <QRCode ref={ref} size={250} value={formValues?.longUrl} />
         )}
 
+        {/* Title input */}
         <Input
           id="title"
           placeholder="Short Link's Title"
@@ -111,6 +110,8 @@ export function CreateLink() {
           onChange={handleChange}
         />
         {errors.title && <Error message={errors.title} />}
+
+        {/* Long URL input */}
         <Input
           id="longUrl"
           placeholder="Enter Your Long URL"
@@ -118,16 +119,22 @@ export function CreateLink() {
           onChange={handleChange}
         />
         {errors.longUrl && <Error message={errors.longUrl} />}
+
+        {/* Custom URL input */}
         <div className="flex items-center gap-2">
           <Card className="p-2">trimrr.in</Card> /
           <Input
             id="customUrl"
-            placeholder="Custom Link (optional)"
+            placeholder="Custom Link"
             value={formValues.customUrl}
             onChange={handleChange}
           />
         </div>
+        {errors.customUrl && <Error message={errors.customUrl} />}
+
+        {/* API error */}
         {error && <Error message={errors.message} />}
+
         <DialogFooter className="sm:justify-start cursor-pointer">
           <Button
             type="button"

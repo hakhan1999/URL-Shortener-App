@@ -26,27 +26,35 @@ export async function deleteUrl(id) {
 
 // Generating QR Code API
 export async function createUrl({ title, longUrl, customUrl, user_id }, qrcode) {
-    const shortUrl = Math.random().toString(36).substring(2, 6)
-    const fileName = `qr-${shortUrl}`
-    const { error: storageError } = await supabase.storage.from('qrs').upload(fileName, qrcode)
+    const shortUrl = Math.random().toString(36).substring(2, 6);
+    const fileName = `qr-${shortUrl}`;
 
-    if (storageError) throw new Error(storageError.message)
+    // Upload QR to storage
+    const { error: storageError } = await supabase.storage.from('qrs').upload(fileName, qrcode);
+    if (storageError) throw new Error(storageError.message);
 
-    const qr = `${supabaseUrl}/storage/v1/object/public/qrs/${fileName}`
+    const qr = `${supabaseUrl}/storage/v1/object/public/qrs/${fileName}`;
 
+    // 👇 Use correct column names from your table
     const { data, error } = await supabase.from("urls").insert([
         {
-            title, original_url: longUrl, custom_url: customUrl, user_id, shortUrl, qr
+            title,
+            original_url: longUrl,
+            custom_url: customUrl,
+            user_id,
+            short_url: shortUrl,
+            qr
         }
-    ]).select()
+    ]).select();
 
     if (error) {
         console.error(error.message);
-        throw new Error('Error creating short URL')
+        throw new Error('Error creating short URL');
     }
 
-    return data
+    return data;
 }
+
 
 
 // Long URL API 

@@ -1,8 +1,6 @@
-import { FilterIcon, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import Error from "@/components/Error";
 import useFetch from "@/hooks/useFetch";
 import { getUrls } from "@/db/apiUrls";
@@ -75,15 +73,6 @@ const Dashboard = () => {
           <div className="flex justify-between mt-10">
             <h1 className="text-4xl font-extrabold">My Links</h1>
             <CreateLink className='cursor-pointer' />
-          </div>
-          <div className="relative mt-4">
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              type="text"
-              placeholder="Filter Links..."
-            />
-            <FilterIcon className="absolute top-2 right-2 p-1" />
           </div>
           {error && <Error message={error?.message} />}
           {(filteredUrls || []).map((url, id) => (

@@ -41,7 +41,18 @@ const LinkCard = ({ url, fetchUrls }) => {
           {url?.original_url}
         </span>
         <span className="flex flex-1 font-normal text-sm items-end">
-          {new Date(url?.created_at).toLocaleString()}
+          {new Date(url?.created_at).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            timeZone: "Asia/Karachi",
+          })}{" "}
+          {new Date(url?.created_at).toLocaleTimeString("en-GB", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+            timeZone: "Asia/Karachi",
+          })}
         </span>
       </Link>
       <div className="flex gap-2">
@@ -49,7 +60,9 @@ const LinkCard = ({ url, fetchUrls }) => {
           variant="ghost"
           className="cursor-pointer bg-[#020618]"
           onClick={() => {
-            navigator.clipboard.writeText(`${domain}${url?.short_url}`);
+            navigator.clipboard.writeText(
+              `${domain}${url?.custom_url ?? url.short_url}`
+            );
           }}
         >
           <Copy />

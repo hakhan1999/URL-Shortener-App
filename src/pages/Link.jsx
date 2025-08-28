@@ -106,25 +106,9 @@ const Link = () => {
             <Button
               variant="ghost"
               className="cursor-pointer bg-[#0f172b]"
-              onClick={() => {
-                navigator.clipboard.writeText(`${domain}${url?.short_url}`);
-              }}
-            >
-              <Copy />
-            </Button>
-            <Button
-              variant="ghost"
-              className="cursor-pointer bg-[#0f172b]"
               onClick={downloadQr}
             >
-              <Download />
-            </Button>
-            <Button
-              variant="ghost"
-              className="cursor-pointer bg-[#0f172b]"
-              onClick={() => fnDelete()}
-            >
-              {loadingDelete ? <Loader2 className="animate-spin" /> : <Trash />}
+              <Download /> Download
             </Button>
           </div>
           <img
@@ -149,9 +133,13 @@ const Link = () => {
                   </CardContent>
                 </Card>
 
-                <CardTitle>Location Data</CardTitle>
+                <CardTitle className="text-3xl font-extrabold">
+                  Location Data
+                </CardTitle>
                 <Location stats={stats} />
-                <CardTitle>Device Info</CardTitle>
+                <CardTitle className="text-3xl font-extrabold">
+                  Device Info
+                </CardTitle>
                 <DeviceStats stats={stats} />
               </CardContent>
             ) : (

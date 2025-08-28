@@ -122,16 +122,27 @@ const SignUp = () => {
       </CardContent>
       <CardContent className="space-y-2">
         <div className="space-y-1">
+          <label
+            htmlFor="profile_pic"
+            className="flex items-center justify-between h-12 px-4 rounded-md border text-sm text-gray-300 cursor-pointer transition"
+          >
+            {formData.profile_pic
+              ? formData.profile_pic.name
+              : "Choose Profile Picture"}
+            <span className="text-sm text-gray-400">Browse</span>
+          </label>
           <Input
+            id="profile_pic"
             onChange={handleInputChange}
-            className="h-12"
             name="profile_pic"
             type="file"
             accept="image/*"
+            className="hidden"
           />
           {errors.profile_pic && <Error message={errors.profile_pic} />}
         </div>
       </CardContent>
+
       <CardFooter>
         <Button onClick={handleSignup} className="cursor-pointer">
           {loading ? <Loader2 className="animate-spin" /> : "Create Account"}
