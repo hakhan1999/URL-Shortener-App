@@ -11,14 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Card } from "./ui/card";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import Error from "./error";
-
 import * as yup from "yup";
 import { createUrl } from "@/db/apiUrls";
 import { QRCode } from "react-qrcode-logo";
 import { Loader2 } from "lucide-react";
 import useFetch from "@/hooks/useFetch";
 import { UrlState } from "@/context/context";
+import Error from "./Error";
 
 export function CreateLink() {
   const { user } = UrlState();
